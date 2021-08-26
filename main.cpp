@@ -23,8 +23,10 @@ int main()
 
         if (res)
         {
-            std::cout << res->status << std::endl;
-            std::cout << res->body << std::endl;
+            std::cout << "Recieved event from " << lambdaApi << std::endl;
+            std::cout << "Status: " << res->status << std::endl;
+            std::cout << "Body:" << std::endl
+                      << res->body << std::endl;
         }
         else
         {
