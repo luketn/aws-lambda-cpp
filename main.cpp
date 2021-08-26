@@ -2,7 +2,7 @@
 #include "./httplib.h"
 
 int main () {
-    httplib::Client cli("http://localhost:3000");
+    httplib::Client cli("https://www.google.com.au");
 
     auto res = cli.Get("/");
 
