@@ -54,7 +54,6 @@ package:
   patterns:
     - '!*/**'
     - '!*'
-    - handler.sh
     - bootstrap
 
 functions:

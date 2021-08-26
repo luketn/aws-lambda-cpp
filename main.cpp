@@ -16,10 +16,10 @@ int main()
         std::abort();
     }
     std::string lambdaApi(rawLambdaApi);
-    httplib::Client cli("http://" + lambdaApi + "/2018-06-01/runtime/invocation/next");
+    httplib::Client cli("http://" + lambdaApi);
     while (true)
     {
-        auto res = cli.Get("/");
+        auto res = cli.Get("/2018-06-01/runtime/invocation/next");
 
         if (res)
         {
