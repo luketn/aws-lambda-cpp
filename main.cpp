@@ -28,7 +28,7 @@ int main()
             std::cout << "Body:" << std::endl
                       << res->body << std::endl;
             std::string responseId = res->get_header_value("Lambda-Runtime-Aws-Request-Id");
-            std::string response = "{\"Body\": \"If you ever see this then it works!\"}";
+            std::string response = "{\"result\": \"If you ever see this (again) then it works!\"}";
             cli.Post(("/2018-06-01/runtime/invocation/" + responseId + "/response").c_str(), response, "application/json");
         }
         else
