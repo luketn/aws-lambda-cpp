@@ -3,38 +3,67 @@
 #include <string>
 #include "./httplib.h"
 
-int main()
-{
-    const char *rawLambdaApi = std::getenv("AWS_LAMBDA_RUNTIME_API");
-    if (rawLambdaApi)
-    {
-        std::cout << "Lambda api: " << rawLambdaApi << std::endl;
-    }
-    else
-    {
-        std::cerr << "Could not find lambda api variable" << std::endl;
-        std::abort();
-    }
-    std::string lambdaApi(rawLambdaApi);
-    httplib::Client cli("http://" + lambdaApi);
+static const int DOTS = 1;
+static const int ON = 2;
+
+std::string getEnvironmentVariable(const char *name, bool mandatory = false);
+
+int getDebugLevel();
+
+int main() {
+    std::string lambdaApi = getEnvironmentVariable("AWS_LAMBDA_RUNTIME_API", true);
+    int debugLevel = getDebugLevel();
     int count = 0;
-    while (true)
-    {
+
+    httplib::Client cli("http://" + lambdaApi);
+    while (true) {
         auto res = cli.Get("/2018-06-01/runtime/invocation/next");
-        if (res)
-        {
-            count++;
-            std::cout << (count % 3 == 0 ? "." : "-");
-            if (count % 80 == 0) {
-                std::cout << std::endl;
+        if (res) {
+            if (debugLevel == DOTS) {
+                count++;
+                std::cout << (count % 3 == 0 ? "<" : "-");
+                if (count % 80 == 0) {
+                    std::cout << std::endl;
+                }
+            } else if (debugLevel == ON) {
+                std::cout << "Recieved event from " << lambdaApi << std::endl;
+                std::cout << "Status: " << res->status << std::endl;
+                std::cout << "Body:" << std::endl
+                          << res->body << std::endl;
             }
+
             std::string responseId = res->get_header_value("Lambda-Runtime-Aws-Request-Id");
             std::string response = "{\"result\": \"If you ever see this (again) then it works!\"}";
-            cli.Post(("/2018-06-01/runtime/invocation/" + responseId + "/response").c_str(), response, "application/json");
-        }
-        else
-        {
+            cli.Post(("/2018-06-01/runtime/invocation/" + responseId + "/response").c_str(), response,
+                     "application/json");
+        } else {
             std::cerr << "error: " << res.error() << std::endl;
         }
     }
+}
+
+int getDebugLevel() {
+    std::string debug = getEnvironmentVariable("DEBUG");
+    int debugLevel = 0;
+    if (debug == "DOTS") {
+        debugLevel = DOTS;
+    } else if (debug == "ON") {
+        debugLevel = ON;
+    }
+    return debugLevel;
+}
+
+std::string getEnvironmentVariable(const char *name, bool mandatory) {
+    std::string result;
+    const char *rawValue = getenv(name);
+    if (rawValue) {
+        std::cout << name << ":" << rawValue << std::endl;
+        result = std::string(rawValue);
+    } else {
+        mandatory ? std::cerr : std::cout << "Could not find environment variable '" << name << "'" << std::endl;
+        if (mandatory) {
+            abort();
+        }
+    }
+    return result;
 }

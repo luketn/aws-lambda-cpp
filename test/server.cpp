@@ -1,7 +1,7 @@
 #include <iostream>
 #include "httplib.h"
 
-static const char *host = "localhost";
+static const char *host = "0.0.0.0";
 static const int port = 3777;
 
 int main()
@@ -13,6 +13,6 @@ int main()
     server.Post("/2018-06-01/runtime/invocation/.*/response", [](const httplib::Request &request, httplib::Response &response)
                { response.set_content("{\"status\":\"OK\"}", "application/json "); });
 
-    printf("Listening for Lambda invocations on http://%s:%d/2018-06-01/runtime/invocation/next\n", host, port);
+    printf("Listening for Lambda invocations on http://localhost:%d/2018-06-01/runtime/invocation/next\n", port);
     server.listen(host, port);
 }

@@ -1,8 +1,7 @@
-docker build --platform linux/amd64 -t tmp-aws-lambda-cpp-build .
-docker create -ti --name build-the-program tmp-aws-lambda-cpp-build /bin/bash
+docker build --platform linux/amd64 -t aws-lambda-cpp .
+docker create -ti --name build-the-program aws-lambda-cpp /bin/bash
 mkdir -p bin
 docker cp build-the-program:/app/main ./bootstrap
 docker rm -f build-the-program
-docker rmi tmp-aws-lambda-cpp-build
 rm -f bootstrap.zip
 zip bootstrap bootstrap
