@@ -1,6 +1,12 @@
 FROM amazonlinux:2
-RUN amazon-linux-extras install epel -y
-RUN yum install -y mongo-c-driver libbson tar clang cmake3 make gzip wget
+RUN yum install -y tar clang cmake3 make gzip wget openssl-devel cyrus-sasl-devel
+
+WORKDIR /opt/mongo-c-driver
+RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.19.0/mongo-c-driver-1.19.0.tar.gz && \
+    tar -xzf mongo-c-driver-1.19.0.tar.gz
+WORKDIR /opt/mongo-c-driver/mongo-c-driver-1.19.0/cmake-build
+RUN cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF ..
+
 WORKDIR /opt/mongocpp
 RUN curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.5/mongo-cxx-driver-r3.6.5.tar.gz
 RUN tar -xzf mongo-cxx-driver-r3.6.5.tar.gz
