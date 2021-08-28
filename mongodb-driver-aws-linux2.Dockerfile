@@ -1,6 +1,6 @@
 FROM amazonlinux:2
 RUN amazon-linux-extras install epel -y
-RUN yum install -y mongo-c-driver libbson tar clang make gzip wget
+RUN yum install -y mongo-c-driver libbson tar clang make gzip wget openssl
 WORKDIR /opt/cmake
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.2/cmake-3.21.2.tar.gz && \
     tar -xvzf cmake-3.21.2.tar.gz && \
