@@ -1,13 +1,6 @@
 FROM amazonlinux:2
 RUN amazon-linux-extras install epel -y
-RUN yum install -y mongo-c-driver libbson tar clang make gzip wget openssl
-WORKDIR /opt/cmake
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.2/cmake-3.21.2.tar.gz && \
-    tar -xvzf cmake-3.21.2.tar.gz && \
-    cd cmake-3.21.2 && \
-    ./bootstrap && \
-    make && \
-    make install
+RUN yum install -y mongo-c-driver libbson tar clang cmake3 make gzip wget
 WORKDIR /opt/mongocpp
 RUN curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.5/mongo-cxx-driver-r3.6.5.tar.gz && \
     tar -xzf mongo-cxx-driver-r3.6.5.tar.gz && \
