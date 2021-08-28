@@ -17,16 +17,17 @@ int main()
     }
     std::string lambdaApi(rawLambdaApi);
     httplib::Client cli("http://" + lambdaApi);
+    int count = 0;
     while (true)
     {
         auto res = cli.Get("/2018-06-01/runtime/invocation/next");
-
         if (res)
         {
-            std::cout << "Recieved event from " << lambdaApi << std::endl;
-            std::cout << "Status: " << res->status << std::endl;
-            std::cout << "Body:" << std::endl
-                      << res->body << std::endl;
+            count++;
+            std::cout << (count % 3 == 0 ? "." : "-");
+            if (count % 80 == 0) {
+                std::cout << std::endl;
+            }
             std::string responseId = res->get_header_value("Lambda-Runtime-Aws-Request-Id");
             std::string response = "{\"result\": \"If you ever see this (again) then it works!\"}";
             cli.Post(("/2018-06-01/runtime/invocation/" + responseId + "/response").c_str(), response, "application/json");

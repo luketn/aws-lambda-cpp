@@ -4,3 +4,5 @@ mkdir -p bin
 docker cp build-the-program:/app/main ./bootstrap
 docker rm -f build-the-program
 docker rmi tmp-aws-lambda-cpp-build
+rm -f bootstrap.zip
+zip bootstrap bootstrap

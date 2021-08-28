@@ -54,11 +54,7 @@ provider:
 
 # you can add packaging information here
 package:
-  patterns:
-    - '!*/**'
-    - '!*'
-#    - handler.sh
-    - bootstrap
+  artifact: bootstrap.zip
 
 functions:
   hello:
