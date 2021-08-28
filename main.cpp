@@ -14,6 +14,7 @@ int main() {
     std::string lambdaApi = getEnvironmentVariable("AWS_LAMBDA_RUNTIME_API", true);
     int debugLevel = getDebugLevel();
     int count = 0;
+    bool longDots = false;
 
     httplib::Client cli("http://" + lambdaApi);
     while (true) {
@@ -21,10 +22,20 @@ int main() {
         if (res) {
             if (debugLevel == DOTS) {
                 count++;
-                std::cout << (count % 3 == 0 ? "<" : "-");
-                if (count % 80 == 0) {
-                    std::cout << std::endl;
+                std::cout << (count % 3 == 0 ? ">" : "-");
+                if (longDots) {
+                    if (count % 80 == 0) {
+                        std::cout << std::endl;
+                        longDots = !longDots;
+                    }
+                } else {
+                    if (count % 40 == 0) {
+                        std::cout << std::endl;
+                        longDots = !longDots;
+                        count += 40;
+                    }
                 }
+
             } else if (debugLevel == ON) {
                 std::cout << "Recieved event from " << lambdaApi << std::endl;
                 std::cout << "Status: " << res->status << std::endl;
