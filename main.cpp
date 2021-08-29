@@ -4,7 +4,7 @@
 #include "./httplib.h"
 
 static const int DOTS = 1;
-static const int ON = 2;
+static const int FULL = 2;
 
 std::string getEnvironmentVariable(const char *name, bool mandatory = false);
 
@@ -36,7 +36,7 @@ int main() {
                     }
                 }
 
-            } else if (debugLevel == ON) {
+            } else if (debugLevel == FULL) {
                 std::cout << "Recieved event from " << lambdaApi << std::endl;
                 std::cout << "Status: " << res->status << std::endl;
                 std::cout << "Body:" << std::endl
@@ -58,8 +58,8 @@ int getDebugLevel() {
     int debugLevel = 0;
     if (debug == "DOTS") {
         debugLevel = DOTS;
-    } else if (debug == "ON") {
-        debugLevel = ON;
+    } else if (debug == "FULL") {
+        debugLevel = FULL;
     }
     return debugLevel;
 }
